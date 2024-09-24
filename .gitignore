@@ -34,3 +34,33 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/
+
+# Tailwind CSS
+tailwind.output.css
+
+# Temporary files
+*.tmp
+*.temp
+
+# Logs
+logs
+*.log
+
+# Optional: Ignore ESLint cache
+.eslintcache
+
+# Optional: Ignore npm cache directory
+.npm
+
+# Optional: Ignore yarn integrity file
+.yarn-integrity

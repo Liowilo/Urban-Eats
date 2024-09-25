@@ -20,19 +20,19 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-green-50">
       <header className="px-4 lg:px-6 h-16 flex items-center justify-between bg-green-600">
-      <Link className="flex items-center justify-center" href="#">
-        <ShoppingBag className="h-8 w-8 text-white" />
-        <span className="ml-2 text-3xl font-bold text-white">UrbanEats</span>
-      </Link>
-      <button
-        className="lg:hidden text-white"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-      >
-        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-      <nav 
-        ref={menuRef}
-        className={`
+        <Link className="flex items-center justify-center" href="#">
+          <ShoppingBag className="h-8 w-8 text-white" />
+          <span className="ml-2 text-3xl font-bold text-white">UrbanEats</span>
+        </Link>
+        <button
+          className="lg:hidden text-white"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+        <nav
+          ref={menuRef}
+          className={`
           lg:flex flex-col lg:flex-row
           absolute lg:relative top-16 lg:top-0 left-0 
           w-full lg:w-auto 
@@ -41,29 +41,29 @@ export default function LandingPage() {
           overflow-hidden transition-all duration-300 ease-in-out
           lg:overflow-visible lg:max-h-full
         `}
-      >
-        <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 py-4 lg:py-0">
-          <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
-            Inicio
-          </Link>
-          <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
-            Acerca de
-          </Link>
-          <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
-            Servicios
-          </Link>
-          <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
-            Contacto
-          </Link>
-          <Button className="bg-white border border-white text-black hover:text-white transition-colors px-4 py-2 text-sm font-medium">
-            Registrarse
-          </Button>
-          <Button className="bg-white text-black border border-white hover:text-white transition-colors px-4 py-2 text-sm font-medium">
-            Iniciar sesión
-          </Button>
-        </div>
-      </nav>
-    </header>
+        >
+          <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 py-4 lg:py-0">
+            <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
+              Inicio
+            </Link>
+            <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
+              Acerca de
+            </Link>
+            <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
+              Servicios
+            </Link>
+            <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
+              Contacto
+            </Link>
+            <Button className="bg-white text-black hover:bg-green-100 hover:text-white transition-colors">
+              Registrarse
+            </Button>
+            <Button className="bg-transparent text-white border border-white hover:bg-white hover:text-green-700 transition-colors">
+              Iniciar sesión
+            </Button>
+          </div>
+        </nav>
+      </header>
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-green-500">
           <div className="container mx-auto px-4 md:px-6">
@@ -77,8 +77,13 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Button className="bg-white text-black hover:bg-green-700 hover:text-white transition-colors">Comenzar</Button>
-                <Button variant="outline" className="bg-green-600 text-white border-white hover:bg-green-700">
+                <Button className="bg-white text-black hover:bg-green-700 hover:text-white transition-colors">
+                  Comenzar
+                </Button>
+                <Button
+                  variant="outline"
+                  className="bg-transparent text-white border-white hover:bg-white hover:text-green-700 transition-colors"
+                >
                   Saber más
                 </Button>
               </div>

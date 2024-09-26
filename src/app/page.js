@@ -55,12 +55,16 @@ export default function LandingPage() {
             <Link className="text-base font-medium text-white hover:text-green-200 transition-colors" href="#">
               Contacto
             </Link>
-            <Button className="bg-white !text-black hover:bg-green-100 hover:!text-white transition-colors">
-              Registrarse
-            </Button>
-            <Button className="bg-transparent text-white border border-white hover:bg-white hover:text-green-700 transition-colors">
-              Iniciar sesión
-            </Button>
+            <Link href="/login-register">
+              <Button className="bg-white !text-black hover:bg-green-100 hover:!text-white transition-colors">
+                Registrarse
+              </Button>
+            </Link>
+            <Link href="/login-register">
+              <Button className="bg-transparent text-white border border-white hover:bg-white hover:text-green-700 transition-colors">
+                Iniciar sesión
+              </Button>
+            </Link>
           </div>
         </nav>
       </header>
@@ -77,9 +81,11 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Button className="bg-white !text-black hover:bg-green-700 hover:!text-white transition-colors">
-                  Comenzar
-                </Button>
+                <Link href="/login-register">
+                  <Button className="bg-white !text-black hover:bg-green-700 hover:!text-white transition-colors">
+                    Comenzar
+                  </Button>
+                </Link>
                 <Button
                   variant="outline"
                   className="bg-transparent text-white border-white hover:bg-white hover:text-green-700 transition-colors"

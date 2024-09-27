@@ -29,13 +29,19 @@ export function middleware(request) {
         return NextResponse.redirect(new URL('/login-register', request.url))
     }
 
+    // Si la ruta es /urban-eats y no hay token, redirige al login
+    if (request.nextUrl.pathname === '/urban-eats' && !token) {
+        return NextResponse.redirect(new URL('/login-register', request.url))
+    }
+
+    // Para todas las demás rutas, permite el acceso
+    return NextResponse.next()
+
     // If there's a token, allow the request
     console.log("Token present, allowing access")
     return NextResponse.next()
 }
 
 export const config = {
-    matcher: [
-        '/((?!_next/static|_next/image|favicon.ico).*)',
-    ],
+    matcher: ['/urban-eats', '/api/:path*']
 }

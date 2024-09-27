@@ -55,8 +55,29 @@ export default function Dashboard() {
     }, [router])
 
     useEffect(() => {
+        async function fetchUserData() {
+            try {
+                const response = await fetch('/api/user', {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const userData = await response.json()
+                    setUserEmail(userData.email)
+                    setUserImage(userData.image || "/placeholder.svg")
+                } else {
+                    throw new Error('Failed to fetch user data')
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error)
+                setError('No se pudo cargar los datos del usuario. Por favor, inicie sesión nuevamente.')
+                router.push('/login-register')
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
         fetchUserData()
-    }, [fetchUserData])
+    }, [router])
 
     const handleLogout = async () => {
         setIsLoggingOut(true)
@@ -77,16 +98,7 @@ export default function Dashboard() {
             setIsLoggingOut(false)
         }
     }
-
-    if (isLoading) return <div>Loading...</div>
-    if (error) return (
-        <div>
-            <h1>Error: {error}</h1>
-            <button onClick={fetchUserData}>Retry</button>
-            <button onClick={() => router.push('/login-register')}>Go to Login</button>
-        </div>
-    )
-
+    
     const vendors = [
         { id: 1, name: "Tacos Don Pedro", productCount: 3 },
         { id: 2, name: "La Fonda de Doña Mari", productCount: 2 },

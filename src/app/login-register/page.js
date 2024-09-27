@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LoginRegister() {
     const [activeTab, setActiveTab] = useState('login')
@@ -14,15 +15,24 @@ export default function LoginRegister() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
     const router = useRouter()
     
+    useEffect(() => {
+        if (successMessage) {
+            const timer = setTimeout(() => setSuccessMessage(''), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage]);
+
     const handleSubmit = async (event) => {
         event.preventDefault()
         setError('')
+        setSuccessMessage('')
         const endpoint = activeTab === 'login' ? '/api/auth/login' : '/api/auth/register'
         
         if (activeTab === 'register' && password !== confirmPassword) {
-            setError('Passwords do not match')
+            setError('Las contraseñas no coinciden')
             return
         }
 
@@ -36,14 +46,20 @@ export default function LoginRegister() {
             const data = await response.json()
 
             if (response.ok) {
-                console.log(activeTab === 'login' ? 'Login successful:' : 'Registration successful:', data)
-                router.push('/urban-eats')
+                if (activeTab === 'login') {
+                    console.log('Login successful:', data)
+                    router.push('/urban-eats')
+                } else {
+                    console.log('Registration successful:', data)
+                    setSuccessMessage('Usuario creado con éxito')
+                    setActiveTab('login')
+                }
             } else {
                 throw new Error(data.message || `${activeTab === 'login' ? 'Login' : 'Registration'} failed`)
             }
         } catch (error) {
             console.error(`${activeTab === 'login' ? 'Login' : 'Registration'} error:`, error)
-            setError(error.message || 'An unexpected error occurred')
+            setError(error.message || 'Un error inesperado ocurrió')
         }
     }
 
@@ -60,6 +76,16 @@ export default function LoginRegister() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {successMessage && (
+            <Alert className="mb-4 bg-green-100 border-green-400 text-green-700">
+              <AlertDescription>{successMessage}</AlertDescription>
+            </Alert>
+          )}
+          {error && (
+            <Alert className="mb-4 bg-red-100 border-red-400 text-red-700">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-4 bg-gray-100 p-1 rounded-md">
               <TabsTrigger value="login" className="rounded-md py-2 text-gray-700 data-[state=active]:bg-white data-[state=active]:text-green-800 data-[state=active]:shadow-sm flex items-center justify-center">

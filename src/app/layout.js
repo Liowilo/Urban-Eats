@@ -14,7 +14,7 @@ const geistMono = localFont({
 
 export const metadata = {
   title: "UrbanEats",
-  description: "Venta y compra estudiantes de la FES Cuautitlán",
+  description: "Venta y compra para estudiantes de la FES Cuautitlán",
   icons: {
     icon: '/img/favicon.ico', // Asumiendo que has movido favicon.ico a public/img
     apple: '/img/apple-icon.png',

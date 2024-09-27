@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
@@ -8,47 +9,43 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function LoginRegister() {
-  const [activeTab, setActiveTab] = useState('login')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const router = useRouter()
-  
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const endpoint = activeTab === 'login' ? '/api/auth/login' : '/api/auth/register'
+    const [activeTab, setActiveTab] = useState('login')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [error, setError] = useState('')
+    const router = useRouter()
     
-    if (activeTab === 'register' && password !== confirmPassword) {
-      alert('Las contraseñas no coinciden')
-      return
-    }
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        if (activeTab === 'login') {
-          // Redirect to the Urban-Eats page after successful login
-          router.push('/urban-eats')
-        } else {
-          alert(data.message)
-          // Optionally, switch to the login tab after successful registration
-          setActiveTab('login')
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        setError('')
+        const endpoint = activeTab === 'login' ? '/api/auth/login' : '/api/auth/register'
+        
+        if (activeTab === 'register' && password !== confirmPassword) {
+            setError('Passwords do not match')
+            return
         }
-      } else {
-        alert(data.message)
-      }
-    } catch (error) {
-      console.error('An error occurred:', error)
-      alert('Ocurrió un error. Por favor, intenta de nuevo.')
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                console.log(activeTab === 'login' ? 'Login successful:' : 'Registration successful:', data)
+                router.push('/urban-eats')
+            } else {
+                throw new Error(data.message || `${activeTab === 'login' ? 'Login' : 'Registration'} failed`)
+            }
+        } catch (error) {
+            console.error(`${activeTab === 'login' ? 'Login' : 'Registration'} error:`, error)
+            setError(error.message || 'An unexpected error occurred')
+        }
     }
-  }
 
   return (
     <div className="min-h-screen bg-green-50 flex items-center justify-center p-4">

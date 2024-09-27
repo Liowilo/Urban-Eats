@@ -5,27 +5,36 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export async function POST(request) {
+    console.log("Login route called");
     try {
         const { email, password } = await request.json();
+        console.log("Email:", email);
 
         if (!email || !password) {
+            console.log("Missing email or password");
             return NextResponse.json({ message: 'Email and password are required' }, { status: 400 });
         }
 
         const client = await clientPromise;
+        console.log("MongoDB connected");
         const db = client.db('Urban-Eats');
 
         const user = await db.collection('users').findOne({ email });
+        console.log("User found:", !!user);
+
         if (!user) {
             return NextResponse.json({ message: 'Invalid credentials' }, { status: 400 });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+        console.log("Password match:", isMatch);
+
         if (!isMatch) {
             return NextResponse.json({ message: 'Invalid credentials' }, { status: 400 });
         }
 
         const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        console.log("Token generated");
 
         const response = NextResponse.json({ message: 'Login successful' }, { status: 200 });
         response.cookies.set('token', token, {
@@ -35,6 +44,7 @@ export async function POST(request) {
             maxAge: 86400 // 1 day
         });
 
+        console.log("Response prepared");
         return response;
     } catch (error) {
         console.error('Login error:', error);

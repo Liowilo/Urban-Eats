@@ -1,0 +1,1 @@
+const HAS_FINISHED_ONBOARDING = "hasFinishedOnboarding";

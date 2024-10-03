@@ -48,6 +48,14 @@ export async function POST(request) {
         return response;
     } catch (error) {
         console.error('Login error:', error);
-        return NextResponse.json({ message: 'Error logging in', error: error.message }, { status: 500 });
+        return NextResponse.json({ message: 'Error logging in', error: error.message }, { 
+            status: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "http://localhost:3000",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+                "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Content-Type, Authorization"
+            } 
+        });
     }
 }

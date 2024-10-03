@@ -1,5 +1,6 @@
 // onBoardingScreen.dart
 import 'package:apps/constants.dart';
+import 'package:apps/ui/auth/AuthScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -187,24 +188,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     await prefs.setBool(HAS_FINISHED_ONBOARDING, true);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
+        builder: (context) => const AuthScreen()
       ),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inicio'),
-      ),
-      body: const Center(
-        child: Text('Hello World'),
-      ),
-    );
-  }
-}
+// class HomeScreen extends StatelessWidget {
+//   const HomeScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Inicio'),
+//       ),
+//       body: const Center(
+//         child: Text('Hello World'),
+//       ),
+//     );
+//   }
+// }

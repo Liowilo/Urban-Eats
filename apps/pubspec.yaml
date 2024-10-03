@@ -7,8 +7,14 @@ environment:
   sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
+  cookie_jar: ^4.0.8
+  dio: ^5.7.0
   flutter:
     sdk: flutter
+  geocoding: ^3.0.0
+  http: 1.2.0
+  moor_flutter: ^4.1.0
+  provider: ^6.1.2
   shared_preferences: 2.2.3
   smooth_page_indicator: ^1.2.0+3
 

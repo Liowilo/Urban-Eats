@@ -1,5 +1,5 @@
 import 'package:apps/services/mobileNetworkConfig.dart';
-import 'package:apps/ui/app/products/ProductGridScreen.dart';
+import 'package:apps/ui/app/buyer/home/HomeScreen.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,11 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       print("Sending request");
       var navigator = Navigator.of(context);
+      navigator.push(
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+      return;
+      
       final client = getClient();
       final response = await client.post(
         urlPath,
@@ -63,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // Navegar a la pantalla de productos
           navigator.push(
-            MaterialPageRoute(builder: (context) => ProductGridScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         } else {
           print("Error al obtener token de la cookie");

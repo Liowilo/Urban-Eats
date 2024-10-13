@@ -9,7 +9,9 @@ import 'package:apps/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  final String role;  // Recibimos el rol como parámetro
+
+  const LoginScreen({Key? key, required this.role}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -26,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> loginUser() async {
     final email = emailController.text;
     final password = passwordController.text;
+    final role = widget.role;  // Usamos el rol que recibimos en el constructor
 
     const urlPath = '$BACKEND_BASE_URL/api/auth/login';
     final url = Uri.parse(urlPath);
@@ -41,7 +44,11 @@ class _LoginScreenState extends State<LoginScreen> {
             "Content-Type": "application/json",
           },
         ),
-        data: jsonEncode({"email": email, "password": password}),
+        data: jsonEncode({
+          "email": email,
+          "password": password,
+          "role": role  // Enviamos el rol seleccionado a la API
+        }),
       );
 
       print("Received response");
@@ -77,17 +84,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Función para extraer el token de la cookie
-  String extractTokenFromCookies(String cookies) {
-    final tokenCookie = cookies.split(';').firstWhere((cookie) => cookie.contains('token='));
-    return tokenCookie.split('=')[1];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Iniciar Sesión'),
+        title: Text('Iniciar Sesión - ${widget.role}'),  // Mostrar el rol en el título
         backgroundColor: Colors.green,
       ),
       body: Padding(

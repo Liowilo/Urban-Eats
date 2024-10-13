@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:apps/constants.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final String role;  // Añadimos el rol como parámetro
+
+  const SignUpScreen({Key? key, required this.role}) : super(key: key);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -21,6 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final email = emailController.text;
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
+    final role = widget.role;  // Obtenemos el rol desde el widget
 
     if (password != confirmPassword) {
       setState(() {
@@ -30,12 +33,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     final url = Uri.parse('$BACKEND_BASE_URL/api/auth/register');
-    
+
     try {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"email": email, "password": password}),
+        body: jsonEncode({
+          "email": email,
+          "password": password,
+          "role": role  // Enviamos el rol seleccionado a la API
+        }),
       );
 
       final data = jsonDecode(response.body);
@@ -64,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crear Cuenta'),
+        title: Text('Crear Cuenta - ${widget.role}'),  // Mostrar el rol en el título
         backgroundColor: Colors.green,
       ),
       body: Padding(

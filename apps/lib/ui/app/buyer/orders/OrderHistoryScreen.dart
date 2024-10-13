@@ -19,24 +19,26 @@ class OrderHistoryScreen extends StatelessWidget {
       Order(
         restaurantName: 'Urban Eats',
         orderDate: DateTime.now().subtract(const Duration(days: 2)),
-        total: 35.50,
+        total: 30.00,
         status: 'Completado',
         items: items,
+        paymentMethod: 'Tarjeta de crédito',
       ),
       Order(
         restaurantName: 'Pizza Place',
         orderDate: DateTime.now().subtract(const Duration(days: 5)),
-        total: 28.99,
+        total: 25.00,
         status: 'Completado',
         items: items,
+        paymentMethod: 'Efectivo',
       ),
       Order(
           restaurantName: 'Burger King',
           orderDate: DateTime.now().subtract(const Duration(days: 7)),
-          total: 19.75,
+          total: 20.00,
           status: 'Cancelado',
-          items: items
-      )
+          items: items,
+          paymentMethod: 'Efectivo')
     ];
   }
 

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:apps/models/CartItem.dart';
+import 'package:apps/models/OrderItem.dart'; // Modelo OrderItem
+import 'package:apps/models/Order.dart'; // Modelo Order
 import 'package:apps/services/CartService.dart';
+import 'package:apps/services/OrderService.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   final CartService _cartService = CartService();
+  final OrderService _orderService = OrderService(); // Instancia de OrderService
   List<CartItem> _cartItems = [];
   double _subtotal = 0.0;
   double _total = 0.0;
@@ -37,20 +41,69 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return _cartItems.fold(0.0, (total, item) => total + (item.price * item.quantity));
   }
 
-  // Confirmación de pago
-  void _confirmPayment() {
-    // Simulamos el proceso de pago
+  // Confirmar y enviar la orden a la API
+  Future<void> _confirmPayment() async {
+    // Convertir CartItems a OrderItems para crear la orden
+    List<OrderItem> orderItems = _cartItems.map((cartItem) {
+      return OrderItem(
+        name: cartItem.name,
+        quantity: cartItem.quantity,
+        price: cartItem.price,
+      );
+    }).toList();
+
+    // Crear la orden
+    Order order = Order(
+      restaurantName: 'Mi Restaurante', // Suponemos que el nombre es estático o lo obtienes de otra parte
+      orderDate: DateTime.now(),
+      total: _total,
+      status: 'Pendiente', // El estado inicial será "Pendiente"
+      items: orderItems,
+      paymentMethod: _selectedPaymentMethod,
+    );
+
+    try {
+      await _orderService.confirmOrder(order); // Enviar la orden a la API
+      _showConfirmationDialog(); // Mostrar el diálogo de confirmación
+    } catch (e) {
+      _showErrorDialog(); // Mostrar error si falla el envío
+    }
+  }
+
+  // Mostrar un diálogo de confirmación
+  void _showConfirmationDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirmacion de Orden'),
-          content: const Text('Tu orden ha sido procesada exitosamente. Recibiras mas detalles en breve.'),
+          content: const Text('Tu orden ha sido procesada exitosamente. Recibirás más detalles en breve.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Cerrar diálogo
                 Navigator.of(context).pop(); // Cerrar pantalla de pago
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Mostrar un diálogo de error si falla el pago
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Hubo un error al procesar tu orden. Intenta nuevamente.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar diálogo
               },
               child: const Text('Aceptar'),
             ),

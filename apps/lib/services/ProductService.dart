@@ -52,4 +52,17 @@ class ProductService {
       throw Exception('Error al actualizar el producto');
     }
   }
+
+  // Método para crear un nuevo producto en la API
+  Future<void> createProduct(Product product) async {
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(product.toJson()),
+    );
+
+    if (response.statusCode != 201) {  // Código de éxito para creación es 201
+      throw Exception('Error al crear el producto');
+    }
+  }
 }

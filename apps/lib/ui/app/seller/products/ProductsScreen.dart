@@ -1,4 +1,5 @@
 import 'package:apps/ui/app/seller/products/ProductDetailsScreen.dart';
+import 'package:apps/ui/app/seller/products/CreateProductScreen.dart'; // Importar la nueva pantalla
 import 'package:flutter/material.dart';
 import 'package:apps/models/Product.dart';
 
@@ -44,6 +45,19 @@ class ProductsScreen extends StatelessWidget {
             return _buildProductCard(context, product);
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navegar a la pantalla de creación de productos
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateProductScreen(),
+            ),
+          );
+        },
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.add),
       ),
     );
   }

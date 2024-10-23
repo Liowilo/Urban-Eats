@@ -1,5 +1,6 @@
 import 'package:apps/services/mobileNetworkConfig.dart';
 import 'package:apps/ui/app/buyer/home/HomeScreen.dart';
+import 'package:apps/ui/app/carrier/home/CarrierHomeScreen.dart';
 import 'package:apps/ui/app/seller/profile/SellerProfileScreen.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -40,6 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (email == "seller") {
         navigator.push(
           MaterialPageRoute(builder: (context) => SellerHomeScreen()),
+        );
+        return;
+      }
+
+      if (email == "carrier") {
+        navigator.push(
+          MaterialPageRoute(builder: (context) => CarrierHomeScreen()),
         );
         return;
       }

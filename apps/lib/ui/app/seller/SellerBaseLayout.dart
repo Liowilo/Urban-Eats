@@ -1,5 +1,3 @@
-import 'package:apps/ui/app/buyer/orders/OrderHistoryScreen.dart';
-import 'package:apps/ui/app/buyer/shared/CartScreen.dart';
 import 'package:flutter/material.dart';
 
 class BaseLayout extends StatelessWidget {

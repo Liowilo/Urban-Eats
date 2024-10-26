@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:apps/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:apps/models/Product.dart'; // Modelo Product
+import 'package:apps/models/Product.dart';
 
 class ProductService {
   static const String apiUrl = 'https://dummyjson.com/products';
+  static const String sellerApiUrl = '${BACKEND_BASE_URL}/api/sellers';
 
   // Método para obtener productos desde la API
   Future<List<Product>> fetchProducts() async {
@@ -13,6 +15,20 @@ class ProductService {
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       List<dynamic> productListJson = jsonResponse['products'];
       return productListJson.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Error al cargar productos');
+    }
+  }
+  
+  Future<List<Product>> fetchCurrentUserProducts() async {
+    final response = await http.get(
+      Uri.parse(sellerApiUrl + '/products'), // Ruta de la API para obtener el perfil
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = jsonDecode(response.body);
+      return jsonResponse.map((json) => Product.fromJson(json)).toList();
     } else {
       throw Exception('Error al cargar productos');
     }
@@ -33,7 +49,10 @@ class ProductService {
 
   // Método para eliminar un producto de la API
   Future<void> deleteProduct(int productId) async {
-    final response = await http.delete(Uri.parse('$apiUrl/$productId'));
+    final response = await http.delete(
+      Uri.parse('$PRODUCTS_API_URL/${productId}'),
+      headers: {'Content-Type': 'application/json'},
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Error al eliminar el producto');
@@ -43,12 +62,13 @@ class ProductService {
   // Método para actualizar un producto de la API
   Future<void> updateProduct(Product product) async {
     final response = await http.put(
-      Uri.parse('$apiUrl/${product.id}'),
+      Uri.parse('$PRODUCTS_API_URL/${product.id}'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(product.toJson()),
     );
 
     if (response.statusCode != 200) {
+      print(response.body);
       throw Exception('Error al actualizar el producto');
     }
   }
@@ -56,7 +76,7 @@ class ProductService {
   // Método para crear un nuevo producto en la API
   Future<void> createProduct(Product product) async {
     final response = await http.post(
-      Uri.parse(apiUrl),
+      Uri.parse('$PRODUCTS_API_URL'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(product.toJson()),
     );

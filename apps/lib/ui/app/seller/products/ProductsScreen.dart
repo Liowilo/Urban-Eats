@@ -2,32 +2,11 @@ import 'package:apps/ui/app/seller/products/ProductDetailsScreen.dart';
 import 'package:apps/ui/app/seller/products/CreateProductScreen.dart'; // Importar la nueva pantalla
 import 'package:flutter/material.dart';
 import 'package:apps/models/Product.dart';
+import 'package:apps/services/ProductService.dart'; // Importar el servicio de productos
 
 class ProductsScreen extends StatelessWidget {
-  // Simulación de lista de productos (normalmente vendría de una API o base de datos)
-  final List<Product> products = [
-    Product(
-      id: 1,
-      name: "Pizza Margarita",
-      description: "Deliciosa pizza con salsa de tomate y queso mozzarella.",
-      imagePath: "https://via.placeholder.com/150",
-      price: 8.99,
-    ),
-    Product(
-      id: 2,
-      name: "Hamburguesa Clásica",
-      description: "Hamburguesa con carne de res, lechuga y tomate.",
-      imagePath: "https://via.placeholder.com/150",
-      price: 6.50,
-    ),
-    Product(
-      id: 3,
-      name: "Ensalada César",
-      description: "Ensalada César con pollo, lechuga romana y aderezo.",
-      imagePath: "https://via.placeholder.com/150",
-      price: 7.25,
-    ),
-  ];
+  // Instancia del servicio de productos
+  final ProductService productService = ProductService();
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +17,26 @@ class ProductsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            final product = products[index];
-            return _buildProductCard(context, product);
+        child: FutureBuilder<List<Product>>(
+          future: productService.fetchCurrentUserProducts(), // Llamamos al método para obtener productos
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator()); // Muestra un indicador de carga mientras esperamos
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}')); // Muestra el error si lo hay
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No hay productos disponibles')); // Maneja la ausencia de productos
+            }
+
+            final List<Product> products = snapshot.data!; // Los productos obtenidos de la API
+
+            return ListView.builder(
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return _buildProductCard(context, product);
+              },
+            );
           },
         ),
       ),

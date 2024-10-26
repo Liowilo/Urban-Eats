@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:apps/services/SellerService.dart'; // Asegúrate de importar tu SellerService
 
+import 'package:flutter/material.dart';
+import 'package:apps/services/SellerService.dart'; // Asegúrate de importar tu SellerService
+
 class EditProfileScreen extends StatefulWidget {
+  final Map<String, dynamic> initialProfile; // Recibe el perfil actual como parámetro
+
+  EditProfileScreen({required this.initialProfile});
+
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
@@ -19,11 +26,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Inicializar los controladores con valores predeterminados si es necesario
-    _nameController.text = "Juan Pérez";
-    _emailController.text = "juan.perez@mail.com";
-    _phoneController.text = "555-1234";
-    _passwordController.text = "123456"; // Podría ser vacío en un escenario real
+    // Inicializar los controladores con los valores recibidos
+    _nameController.text = widget.initialProfile['name'] ?? '';
+    _emailController.text = widget.initialProfile['email'] ?? '';
+    _phoneController.text = widget.initialProfile['phone'] ?? '';
   }
 
   @override
@@ -42,14 +48,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         name: _nameController.text,
         email: _emailController.text,
         phone: _phoneController.text,
-        password: _passwordController.text,
+        password: _passwordController.text.isNotEmpty ? _passwordController.text : null, // Enviar la contraseña solo si ha sido cambiada
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Perfil actualizado con éxito')),
+        const SnackBar(content: Text('Perfil actualizado con éxito')),
       );
+      Navigator.pop(context); // Volver a la pantalla anterior después de guardar
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al actualizar el perfil')),
+        const SnackBar(content: Text('Error al actualizar el perfil')),
       );
     }
   }
@@ -140,3 +147,4 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 }
+
